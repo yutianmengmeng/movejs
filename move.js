@@ -18,14 +18,8 @@ function startMove(obj,attr,iTarget){
 				var speed=(iTarget-cur)/7;
 				speed=speed>0?Math.ceil(speed):Math.floor(speed);
 
-				if(Math.abs(iTarget-cur)<7){
+				if(cur==iTarget){
 					clearInterval(obj.timer);
-					if(attr=="opacity"){
-						obj.style.filter="alpha(opacity:"+iTarget+")";
-						obj.style.opacity=iTarget/100
-					}else{
-						obj.style[attr]=iTarget+"px";
-					}
 				}else{
 					if(attr=='opacity'){
 						obj.style.filter="alpha(opacity:"+(cur+speed)+")";

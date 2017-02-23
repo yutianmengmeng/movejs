@@ -1,0 +1,62 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>幻灯片</title>
+	<link rel="stylesheet" href="ppt.css">
+	<script src="move2.js"></script>
+</head>
+<body>
+	<div id="play" class="play">
+		<ol>
+			<li class='active'>1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+		</ol>
+		<ul>
+			<li><a href="#"></a><img src="images/h1.jpg"alt=""></li>
+			<li><a href="#"></a><img src="images/h2.jpg"alt=""></li>
+			<li><a href="#"></a><img src="images/h3.jpg"alt=""></li>
+			<li><a href="#"></a><img src="images/h4.jpg"alt=""></li>
+			<li><a href="#"></a><img src="images/h5.jpg"alt=""></li>
+		</ul>
+	</div>
+	<script>
+		var oDiv=document.querySelector("#play");
+		var aBtn=document.querySelectorAll("ol")[0].querySelectorAll("li");
+		var oUl=document.querySelectorAll("ul")[0];
+		var now=0;
+		for(var i=0;i<aBtn.length;i++){
+			aBtn[i].index=i;
+			aBtn[i].onclick=function(){
+				now=this.index;
+				tab();
+		}
+		function tab(){
+				for(var i=0;i<aBtn.length;i++){
+					aBtn[i].className=''
+				}
+				aBtn[now].className='active';
+				startMove(oUl,{top:now*(-150)});
+			}
+		}
+
+		function next(){
+			now++;
+			if(now==aBtn.length){
+				now=0;
+			}
+			tab();
+		}
+		var timer=setInterval(next, 2000);
+
+		oDiv.onmouseover=function(){
+			clearInterval(timer);
+		}
+		oDiv.onmouseout=function(){
+			timer=setInterval(next, 2000);
+		}
+	</script>
+</body>
+</html>
