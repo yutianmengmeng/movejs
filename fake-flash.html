@@ -1,0 +1,147 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>仿照flash应用</title>
+	<link rel="stylesheet" href="flash.css">
+	<script src="move.js"></script>
+</head>
+<body>
+	<div id="playimages" class='play'>
+		<ul class="big_pic">
+			<div class="prev"></div>
+			<div class="next"></div>
+			<div class="text">加载图片说明...</div>
+			<div class="length">计算图片数量....</div>
+			<a href="javascript:;" class="mark_left"></a>
+			<a href="javascript:;" class="mark_right"></a>
+			<div class="bg"></div>
+			<li style="z-index:1">
+				<img src="./images/1.jpg"  alt="">
+			</li>
+			<li><img src="images/2.jpg" alt=""></li>
+			<li><img src="images/3.jpg" alt=""></li>
+			<li><img src="images/4.jpg" alt=""></li>
+			<li><img src="images/5.jpg" alt=""></li>
+			<li><img src="images/6.jpg" alt=""></li>
+		</ul>
+		<div class="small_pic">
+			<ul style="width:390px">
+				<li style="filter:100;opacity:1"><img src="images/1.jpg" alt=""></li>
+				<li><img src="images/2.jpg" alt=""></li>
+				<li><img src="images/3.jpg" alt=""></li>
+				<li><img src="images/4.jpg" alt=""></li>
+				<li><img src="images/5.jpg" alt=""></li>
+				<li><img src="images/6.jpg" alt=""></li>
+			</ul>
+		</div>
+	</div>
+	<script>	
+		var g_aImgInfo=
+		[
+			{info: "都市魅力", href: 'http://www.zhinengshe.com/'},
+			{info: "古香古色", href: 'http://www.zhinengshe.com/'},
+			{info: "沉浸舞步的舞者", href: 'http://www.zhinengshe.com/'},
+			{info: "名贵跑车", href: 'http://www.zhinengshe.com/'},
+			{info: "聆听天籁的精灵", href: 'http://www.zhinengshe.com/'},
+			{info: "绚彩光芒", href: 'http://www.zhinengshe.com/'}
+		];
+		var oDiv=document.querySelector("#playimages");
+		var oBtnprev=oDiv.querySelectorAll(".prev")[0];
+		var oBtnnext=oDiv.querySelectorAll(".next")[0];
+		var oMarkLeft=oDiv.querySelectorAll(".mark_left")[0];
+		var oMarkRight=oDiv.querySelectorAll(".mark_right")[0];
+		var oTxtInfo=oDiv.querySelectorAll(".text")[0];
+		var oTxtNum=oDiv.querySelectorAll(".length")[0];
+
+		oTxtInfo.innerHTML=g_aImgInfo[0].info;
+		oTxtNum.innerHTML="1/"+g_aImgInfo.length;
+
+		//左右按钮切换
+		oBtnprev.onmouseover=oMarkLeft.onmouseover=function(){
+			startMove(oBtnprev,'opacity',100);
+		}
+		oBtnprev.onmouseout=oMarkLeft.onmouseout=function(){
+			startMove(oBtnprev,'opacity',0);
+		}
+		oBtnnext.onmouseover=oMarkRight.onmouseover=function(){
+			startMove(oBtnnext,'opacity',100);
+		}
+		oBtnnext.onmouseout=oMarkRight.onmouseout=function(){
+			startMove(oBtnnext,'opacity',0);
+		}
+
+		//点击小图,大图切换
+		var oSmall_pic=document.querySelectorAll(".small_pic")[0];
+		var oSmallUl=oSmall_pic.querySelectorAll("ul")[0];
+		var oBig_pic=document.querySelectorAll(".big_pic")[0];
+		var aSmallLi=oSmall_pic.querySelectorAll("li");
+		var aBigLi=oBig_pic.querySelectorAll("li");
+		var nowZIndex=2;
+		var now=0;//用来标识当前图片是第几张
+
+		oSmallUl.style.width=aSmallLi.length*aSmallLi[0].offsetWidth;
+		for(var i=0;i<aSmallLi.length;i++){
+			aSmallLi[i].index=i;
+			aSmallLi[i].onclick=function(){
+				if(this.index==now) return;
+				now=this.index;
+				tab()
+			}
+			aSmallLi[i].onmouseover=function(){
+				startMove(this,'opacity',100);
+			}
+			aSmallLi[i].onmouseout=function(){
+				if(this.index!=now){
+					startMove(this,'opacity',60);
+				}
+				
+			}
+
+		}
+		function tab(){
+			aBigLi[now].style.zIndex=nowZIndex++;
+				
+				for(var i=0;i<aSmallLi.length;i++){
+					startMove(aSmallLi[i],'opacity',60)
+				}
+				startMove(aSmallLi[now],"opacity",100);
+				
+				aBigLi[now].style.height=0;
+				startMove(aBigLi[now],'height',320);
+				if(now==0){
+					startMove(oSmallUl,'left',0);
+				}else if(now==aSmallLi.length-1){
+					startMove(oSmallUl,'left',-(now-2)*aSmallLi[0].offsetWidth);
+				}else{
+					startMove(oSmallUl,'left',-(now-1)*aSmallLi[0].offsetWidth);
+				}
+				
+				oTxtInfo.innerHTML=g_aImgInfo[now].info;
+				oTxtNum.innerHTML=(now+1)+"/"+g_aImgInfo.length;
+		}
+		//点击button左右切换
+		oBtnprev.onclick=function(){
+			now--;
+			if(now==-1){
+				now=aSmallLi.length-1;
+			}
+			tab()
+		}
+		oBtnnext.onclick=function(){
+			now++;
+			if(now==aSmallLi.length){
+				now=0;
+			}
+			tab()
+		}
+		var timer=setInterval(oBtnnext.onclick, 2000);
+		oDiv.onmouseover=function(){
+			clearInterval(timer)
+		}
+		oDiv.onmouseout=function(){
+			timer=setInterval(oBtnnext.onclick, 2000);
+		}
+
+	</script>
+</body>
+</html>
